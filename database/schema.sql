@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS registrations;
 DROP TABLE IF EXISTS games;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS settings;
+DROP TABLE IF EXISTS departments;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -20,7 +21,7 @@ CREATE TABLE users (
   id            INT AUTO_INCREMENT PRIMARY KEY,
   name          VARCHAR(255)  NOT NULL,
   roll_number   VARCHAR(50)   NOT NULL UNIQUE,
-  email         VARCHAR(255)  NOT NULL UNIQUE,
+  email         VARCHAR(255)  NULL UNIQUE,
   phone         VARCHAR(15)   NOT NULL,
   department    VARCHAR(100)  NOT NULL,
   year          TINYINT UNSIGNED NOT NULL COMMENT '1-4',
@@ -130,6 +131,20 @@ CREATE TABLE settings (
   updated_by VARCHAR(100)  DEFAULT 'system',
   updated_at TIMESTAMP     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+-- ─── departments ─────────────────────────────────────────────────────────────
+CREATE TABLE departments (
+  id     INT AUTO_INCREMENT PRIMARY KEY,
+  name   VARCHAR(100) NOT NULL,
+  active BOOLEAN NOT NULL DEFAULT TRUE,
+  UNIQUE KEY uq_dept_name (name)
+);
+
+INSERT INTO departments (name) VALUES
+  ('Computer Science'),
+  ('Electronics and Communication'),
+  ('Mechanical'),
+  ('Robotics');
 
 -- ─── audit_log ────────────────────────────────────────────────────────────────
 CREATE TABLE audit_log (
