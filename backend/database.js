@@ -13,11 +13,12 @@ const createConnection = () => {
     database: process.env.DB_NAME || 'college_sports_day',
     port: process.env.DB_PORT || 3306,
     waitForConnections: true,
-    connectionLimit: 20, // Handle more concurrent admins
+    connectionLimit: 20,
     queueLimit: 50,
     connectTimeout: 60000,
     acquireTimeout: 60000,
-    timeout: 60000
+    timeout: 60000,
+    ...(process.env.DB_SSL === 'true' && { ssl: { rejectUnauthorized: false } }),
   });
 };
 
