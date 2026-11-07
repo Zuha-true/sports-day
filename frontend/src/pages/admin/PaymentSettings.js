@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import client from '../../api/client';
 import AdminLayout from '../../components/AdminLayout';
+import upiQr from '../../assets/upiscanner.jpeg';
 
 export default function PaymentSettings() {
   const [info, setInfo] = useState({ qr_url: '', upi_id: '', payee_name: '' });
@@ -72,7 +73,7 @@ export default function PaymentSettings() {
           <h2>UPI QR Code</h2>
           <div style={{ marginBottom: 12 }}>
             <p>Current QR:</p>
-            <img src={info.qr_url || '/upiscanner.jpeg'} alt="Current QR" className="qr-image" />
+            <img src={info.qr_url || upiQr} alt="Current QR" className="qr-image" />
           </div>
           <form onSubmit={handleQrUpload} className="register-form">
             <div className="form-group">

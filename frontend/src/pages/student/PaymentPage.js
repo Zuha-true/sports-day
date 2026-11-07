@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import client from '../../api/client';
+import upiQr from '../../assets/upiscanner.jpeg';
 
 export default function PaymentPage() {
   const { id } = useParams();
@@ -122,7 +123,7 @@ export default function PaymentPage() {
             {payInfo.payee_name ? ` (${payInfo.payee_name})` : ''} or scan the QR code.
           </p>
           <p className="payment-note">After paying, enter your UTR/transaction reference number below.</p>
-          <img src={payInfo.qr_url || '/upiscanner.jpeg'} alt="UPI QR Code" className="qr-image" />
+          <img src={payInfo.qr_url || upiQr} alt="UPI QR Code" className="qr-image" />
         </div>
 
         <form onSubmit={handleSubmit} className="register-form" style={{ marginTop: 24 }}>
