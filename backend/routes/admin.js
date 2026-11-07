@@ -272,12 +272,15 @@ router.post('/manual-registration', [
       return res.status(400).json({ error: 'Team name is required for duo/team games' });
     }
 
+    // Duo captain pays for both; partner's fee is 0
+    const captainFee = game.category === 'duo' ? game.entry_fee * 2 : game.entry_fee;
+
     // Create captain registration
     const [regResult] = await connection.query(
       `INSERT INTO registrations
          (user_id, game_id, status, fee_paid, utr, payment_method, approved_by, approved_at)
        VALUES (?, ?, 'approved', ?, ?, ?, 'admin', NOW())`,
-      [userId, game_id, game.entry_fee, utr || null, payment_method]
+      [userId, game_id, captainFee, utr || null, payment_method]
     );
     const captainRegId = regResult.insertId;
 
@@ -298,8 +301,8 @@ router.post('/manual-registration', [
       const [partnerRegResult] = await connection.query(
         `INSERT INTO registrations
            (user_id, game_id, status, fee_paid, payment_method, partner_reg_id, approved_by, approved_at)
-         VALUES (?, ?, 'approved', ?, ?, ?, 'admin', NOW())`,
-        [partner.id, game_id, game.entry_fee, payment_method, captainRegId]
+         VALUES (?, ?, 'approved', 0, ?, ?, 'admin', NOW())`,
+        [partner.id, game_id, payment_method, captainRegId]
       );
       await connection.query(
         'UPDATE registrations SET partner_reg_id = ? WHERE id = ?',

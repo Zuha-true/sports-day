@@ -95,7 +95,8 @@ router.post('/', requireStudent, screenshotUpload.single('screenshot'),
         return res.status(400).json({ error: 'Team name is required' });
       }
 
-      const feePaid = game.entry_fee;
+      // Duo captain pays for both; partner's fee is 0
+      const feePaid = game.category === 'duo' ? game.entry_fee * 2 : game.entry_fee;
 
       // Create student's registration
       const [result] = await connection.query(
@@ -135,8 +136,8 @@ router.post('/', requireStudent, screenshotUpload.single('screenshot'),
 
         const [partnerResult] = await connection.query(
           `INSERT INTO registrations (user_id, game_id, status, fee_paid, payment_method, partner_reg_id)
-           VALUES (?, ?, 'pending', ?, 'upi', ?)`,
-          [partner.id, game_id, feePaid, regId]
+           VALUES (?, ?, 'pending', 0, 'upi', ?)`,
+          [partner.id, game_id, regId]
         );
         await connection.query(
           'UPDATE registrations SET partner_reg_id = ? WHERE id = ?',

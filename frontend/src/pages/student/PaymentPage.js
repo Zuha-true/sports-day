@@ -102,7 +102,16 @@ export default function PaymentPage() {
               <p style={{margin:0}}>Entry fee: <strong>₹{game.entry_fee}</strong></p>
             )}
             {game.category === 'duo' && (
-              <p style={{margin:0}}>₹{game.entry_fee} per person — pay for yourself. Your partner pays separately when approved.</p>
+              <>
+                <p style={{margin:'0 0 4px'}}>
+                  ₹{game.entry_fee} per person ×{' '}
+                  <strong>2 players</strong>
+                  {' '}= <strong>₹{game.entry_fee * 2}</strong>
+                </p>
+                <p style={{margin:0,fontSize:13,color:'var(--muted-color)'}}>
+                  The team leader pays for both players in one transaction.
+                </p>
+              </>
             )}
             {game.category === 'team' && (
               <>
